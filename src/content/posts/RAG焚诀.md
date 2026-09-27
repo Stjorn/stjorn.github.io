@@ -28,7 +28,7 @@ RAG分为离线和在线两个部分。
 
 一个基本的RAG流程如下：
 
-![image-20260416000747617](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260416000747927.png)
+![image-20260416000747617](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260416000747927.png)
 
 # 解析
 

@@ -13,7 +13,7 @@ draft: false
 
 2017 年，Google 在论文《 Attention is All you need 》中提出了 Transformer 模型，其使用 Self-Attention 结构取代了在 NLP  任务中常用的 RNN 网络结构。相比 RNN 网络结构，其最大的优点是可以**并行计算**和**长距离信息捕捉**。Transformer 的整体模型架构如下图所示：
 
-![3c318ffbcd1b73c48c8bd433d479b9a7](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415025317216.png)
+![3c318ffbcd1b73c48c8bd433d479b9a7](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415025317216.png)
 
 目前这种 Encode-Decode 的 Transformer架构已经不常见了，主流的模型如 GPT 使用的是 Decode-only 架构，Bert 使用的是 Encode-only 架构。
 
@@ -31,7 +31,7 @@ draft: false
 
 原始输入文本 → 分词处理（Tokenization）→ 得到 token 序列 → 词汇表映射（Vocabulary Mapping） →  得到 token ID 序列 → 嵌入层（Embedding Layer）
 
-![image-20260415030108049](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030108238.png)
+![image-20260415030108049](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030108238.png)
 
 因为 Transformer 自注意力是并行、无序的，而不是像 RNN 一样串行处理数据序列，所以必须引入外部位置编码来补全顺序。
 
@@ -39,7 +39,7 @@ draft: false
 
 词嵌入矩阵 → 位置编码生成（Positional Encoding）→ 词嵌入矩阵＋位置编码 → 带位置信息的输入表示矩阵
 
-![image-20260415030139893](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030140011.png)
+![image-20260415030139893](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030140011.png)
 
 RoPE 的本质是：利用复数乘法的几何意义（模长相乘、角度相加），不改变向量长度，只通过旋转向量的角度来注入位置信息。 当带角度的 *Q* 和 *K* 进行内积时，结果刚好只与它们的相对位置差有关。
 
@@ -51,9 +51,9 @@ Attention机制概括来说就是：考虑别的token对当前token在语义空�
 
 线性变换生成Query、Key、Value矩阵 → 计算注意力得分（Attention Scores） → 得到注意力得分矩阵 → Softmax归一化＋加权求和 → 多头并行处理 → 输出上下文感知的表示矩阵
 
-![image-20260415030224180](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030224307.png)
+![image-20260415030224180](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030224307.png)
 
-![](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030310502.png)多头机制的本质是:与其用一个高维的注意力头去捕捉所有语义，不如把维度切分成h个低维的”子头”(Head)，让不同的头去关注不同的特征子空间(比如有的头关注语法，有的头关注指代关系)，最后再拼起来。
+![](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030310502.png)多头机制的本质是:与其用一个高维的注意力头去捕捉所有语义，不如把维度切分成h个低维的”子头”(Head)，让不同的头去关注不同的特征子空间(比如有的头关注语法，有的头关注指代关系)，最后再拼起来。
 
 多头注意力机制计算公式如下：
 $$
@@ -74,7 +74,7 @@ LayerNorm即Layer Normalization，是 Transformer中的层归一化，主要是�
 
 先说一下残差连接，首次在《Deep Residual Learning for Image Recognition》中被提出，这篇论文是目前ai领域引用最高的论文。
 
-![image-20260415030408099](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030408236.png)
+![image-20260415030408099](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030408236.png)
 
 残差连接的核心思想是将输入直接“跳过"子层加到输出上。也就是说遇到训练后效果下降的子层，会直接赋予一个很低的权重，将这个子层带来的训练效果的影响降到很低，从而选择性地保留训练效果好的子层。残差连接解决了深层网络训练困难，网络更深性能反而下降的问题。
 
@@ -92,7 +92,7 @@ FFN的处理过程：
 
 输入矩阵 → 线性层1（升维）→ 激活函数 → 线性层2（降维）→ 残差连接 → 最终输出
 
-![image-20260415030441839](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260415030441966.png)
+![image-20260415030441839](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260415030441966.png)
 
 # **输出**：Liner层 & Softmax层
 

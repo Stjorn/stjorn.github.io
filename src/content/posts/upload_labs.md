@@ -28,19 +28,19 @@ eval():eval()函数会把收到的字符串再次当作 PHP 代码解释。
 
 1. 先看一下源码。白名单为图片类型。且确实是在前端对不合法文件进行验证的。
 
-   ![image-20260718001815614](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718001816076.png)
+   ![image-20260718001815614](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718001816076.png)
 
    可以传一个图片马：在记事本中写个一句话木马，保存为.jpg文件。
 
-   ![image-20260718004215300](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718004215378.png)
+   ![image-20260718004215300](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718004215378.png)
 
 2. 在burp里拦截上传请求，可以看到文件内容就是一句话木马。现在将 filename 从 shell.jpg 改成 shell.php。
 
-   ![5ad113f3927898365466e95cd3e3a8e0](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718004454880.png)
+   ![5ad113f3927898365466e95cd3e3a8e0](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718004454880.png)
 
    Forward，可以看到请求已经传到服务器了。
 
-   ![image-20260718005044026](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718005044102.png)
+   ![image-20260718005044026](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718005044102.png)
 
 3. 向上传后的 php 发送 post 参数：`Content-Type: application/x-www-form-urlencoded`意思是告诉 php 请求正文使用普通表单参数格式，Burp 抓包普通登录、提交表单的请求，基本都是这个 Content-Type。`echo%20%22WEB-SHELL-OK%22%3B`是参数值，因为请求头声明了表单格式，PHP 会将它解析成：`$_POST['cmd']`。
 
@@ -53,11 +53,11 @@ eval():eval()函数会把收到的字符串再次当作 PHP 代码解释。
    cmd=echo%20%22WEB-SHELL-OK%22%3B
    ```
 
-   ![image-20260718005230866](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718005230920.png)
+   ![image-20260718005230866](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718005230920.png)
 
    成功拿到 webshell：
 
-   ![image-20260718010306110](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260718010306189.png)
+   ![image-20260718010306110](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260718010306189.png)
 
 完整利用链：
 
@@ -79,11 +79,11 @@ eval():eval()函数会把收到的字符串再次当作 PHP 代码解释。
 
 这次是在服务后端对不合法文件进行验证的了，白名单类型依然是图片。但是后端只校验 Content-Type，完全不校验文件名后缀。所以这和绕过前端验证的方法也没啥区别，直接传一个图片马，在burp里改filename就行了， Content-Type 本来就是白名单里的`image/jpeg`。
 
-![edab49f697ef9144166d657766ccf96e](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260719015240683.png)
+![edab49f697ef9144166d657766ccf96e](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260719015240683.png)
 
-![image-20260719020409952](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260719020410115.png)
+![image-20260719020409952](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260719020410115.png)
 
-![image-20260719020511711](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260719020511798.png)
+![image-20260719020511711](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260719020511798.png)
 
 利用链：
 
@@ -105,19 +105,19 @@ eval():eval()函数会把收到的字符串再次当作 PHP 代码解释。
 
 1. 查看源码，发现这次是黑名单验证，禁止上传`asp、aspx、php、jsp`这四种后缀的文件。并且会对上传的文件名做随机数字处理。
 
-   ![2cf945aed3ed3fcd0fbae5ee567f9062](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723005644557.png)
+   ![2cf945aed3ed3fcd0fbae5ee567f9062](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723005644557.png)
 
 2. 这时候我们就要想办法绕过，在网上查了一下，说黑名单规则不严谨，在某些特定环境中某些特殊后缀仍会被当作php文件解析 php、php2、php3、php4、php5、php6、php7、pht、phtm、phtml。我们这里用 .php5 试一下，直接上传一个名为 shell.php5 的文件，可以发现直接上传成功。
 
-   ![0d47b560-e450-4bad-9abf-a1d4d5e425a2](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723011044417.png)	
+   ![0d47b560-e450-4bad-9abf-a1d4d5e425a2](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723011044417.png)	
 
 3. 也确实是被当作php文件解析了。
 
-   ![image-20260723011325539](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723011325626.png)
+   ![image-20260723011325539](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723011325626.png)
 
 # Pass-04
 
-看下源码，发现这关黑名单比第三关多了很多。这个时候就只能构造.htaccess文件了。(利用Apache漏洞)![image-20260723013901651](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723013901766.png)
+看下源码，发现这关黑名单比第三关多了很多。这个时候就只能构造.htaccess文件了。(利用Apache漏洞)![image-20260723013901651](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723013901766.png)
 
 首先创建一个.htaccess文件，内容如下：
 
@@ -127,15 +127,15 @@ AddType application/x-httpd-php .jpg
 
 **这个文件的作用就是将同目录（含有子目录）下的所有可执行的php文件，都具有执行权力。这样上传jpg，但是jpg的内容里有php的代码，他就能执行。相当于给了一个环境。**
 
-![image-20260723020635645](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723020635705.png)
+![image-20260723020635645](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723020635705.png)
 
 先上传这个.htaccess，再上传一个图片马。访问这个图片马。可以看到确实是被当作php文件解析了。
 
-![image-20260723023348234](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723023348293.png)
+![image-20260723023348234](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723023348293.png)
 
 发送 post 参数。拿到 websell。
 
-![image-20260723023631751](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723023631829.png)
+![image-20260723023631751](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723023631829.png)
 
 
 
@@ -147,25 +147,25 @@ AddType application/x-httpd-php .jpg
 $deny_ext = array(".php",".php5",".php4",".php3",".php2",".html",".htm",".phtml",".pht",".pHp",".pHp5",".pHp4",".pHp3",".pHp2",".Html",".Htm",".pHtml",".jsp",".jspa",".jspx",".jsw",".jsv",".jspf",".jtml",".jSp",".jSpx",".jSpa",".jSw",".jSv",".jSpf",".jHtml",".asp",".aspx",".asa",".asax",".ascx",".ashx",".asmx",".cer",".aSp",".aSpx",".aSa",".aSax",".aScx",".aShx",".aSmx",".cEr",".sWf",".swf",".htaccess");
 ```
 
-![image-20260723030829114](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260723030829197.png)
+![image-20260723030829114](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260723030829197.png)
 
 # Pass-06
 
 看下源码，可以看到这关没有转换大小写的代码：`$file_ext = strtolower($file_ext); //转换为小写`。这样我们就可以上传大小写混合的后缀名来进行绕过。
 
-![image-20260724013416022](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724013416186.png)
+![image-20260724013416022](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724013416186.png)
 
 上传一个shell.Php，直接上传成功。
 
-![image-20260724033901095](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724033901406.png)
+![image-20260724033901095](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724033901406.png)
 
-![image-20260724040421257](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724040421360.png)
+![image-20260724040421257](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724040421360.png)
 
 # Pass-07
 
 这一关的源码是缺少这一句： `$file_ext = trim($file_ext); //首尾去空`。
 
-![image-20260724042312269](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724042312391.png)
+![image-20260724042312269](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724042312391.png)
 
 可以在后缀添加一个空格进行绕过，但是在Windows系统中我们无法创建后缀带空格的文件，但是在数据包中不会对后缀的空格进行清除，那么我们这里就需要使用到BS进行抓包，对其进行修改，然后再进行上传。
 
@@ -175,9 +175,9 @@ $deny_ext = array(".php",".php5",".php4",".php3",".php2",".html",".htm",".phtml"
 
 成功上传。
 
-![image-20260724042734291](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724042734419.png)
+![image-20260724042734291](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724042734419.png)
 
-![image-20260724042909719](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724042909810.png)
+![image-20260724042909719](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724042909810.png)
 
 # Pass-08
 
@@ -185,13 +185,13 @@ $deny_ext = array(".php",".php5",".php4",".php3",".php2",".html",".htm",".phtml"
 
 所以这关是用点绕过，点绕过和空格绕过是一样的，都是利用操作系统的特性来进行解析绕过。和空格一样，上传成功后，服务器会自动删除点的。
 
-![image-20260724043942169](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724043942285.png)
+![image-20260724043942169](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724043942285.png)
 
 成功绕过。
 
-![image-20260724044027228](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724044027323.png)
+![image-20260724044027228](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724044027323.png)
 
-![image-20260724044130169](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260724044130249.png)
+![image-20260724044130169](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260724044130249.png)
 
 # Pass-09
 
@@ -201,13 +201,13 @@ $deny_ext = array(".php",".php5",".php4",".php3",".php2",".html",".htm",".phtml"
 
 这一关源码就是缺少了这一句：`$file_ext = str_ireplace('::$DATA', '', $file_ext);//去除字符串::$DATA`。所以可以在文件名后面添加`::$DATA` 进行绕过。
 
-![image-20260726001318359](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726001318765.png)
+![image-20260726001318359](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726001318765.png)
 
 成功上传。
 
-![image-20260726001407448](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726001407577.png)
+![image-20260726001407448](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726001407577.png)
 
-![image-20260726001629605](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726001629685.png)
+![image-20260726001629605](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726001629685.png)
 
 # Pass-10
 
@@ -266,13 +266,13 @@ trim() 后变成
 shell.php
 ```
 
-![image-20260726013417805](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726013418089.png)
+![image-20260726013417805](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726013418089.png)
 
 上传成功。
 
-![image-20260726013628156](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726013628299.png)
+![image-20260726013628156](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726013628299.png)
 
-![image-20260726013728607](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726013728695.png)
+![image-20260726013728607](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726013728695.png)
 
 想做好一个无漏洞的文件上传功能真的需要想很多啊！
 
@@ -280,15 +280,15 @@ shell.php
 
 查看这一关源码，可以看到没有了前几关的验证方式，而且是一个黑名单验证，意思是如果上传了它这些后缀的文件，就会把后缀名删除，没了后缀名也就无法正常解析。这次因为他没有前机关的验证方式，所以我们也就无法利用验证方式绕过。
 
-![image-20260726015721848](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726015721962.png)
+![image-20260726015721848](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726015721962.png)
 
 不过这关同样是只验证一次，所以我们只需要把后缀改为.pphphp，它删除掉中间的php后后缀仍然为php，以此实现绕过。
 
 成功上传 webshell。
 
-![image-20260726021319615](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726021319747.png)
+![image-20260726021319615](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726021319747.png)
 
-![image-20260726021352791](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726021352872.png)
+![image-20260726021352791](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726021352872.png)
 
 # Pass-12-可控保存路径
 
@@ -304,7 +304,7 @@ shell.php
 
 这是因为php语言的底层是c语言，而\0在c语言中是字符串 的结束符，所以导致00截断的发生 ）
 
-![image-20260726022135525](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726022135639.png)
+![image-20260726022135525](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726022135639.png)
 
 所以清晰地思路是：
 
@@ -317,7 +317,7 @@ shell.php被成功上传，内容为shell.jpg的内容。
 这就是“白名单图片后缀 + 可控保存路径 + 空字节截断”。
 ```
 
-![4949e6fe888b8511e2e158428f07f0b5](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726023300105.png)
+![4949e6fe888b8511e2e158428f07f0b5](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726023300105.png)
 
 # Pass-13
 
@@ -368,9 +368,9 @@ Content-Disposition: form-data; name="submit"
 
 这是burp抓到的原始包，我们将`../upload/`改成`../upload/shell.php%00`。选中`%00`右键选择`convert selection`，然后选择URL最后选择网址解码即可进行解码。
 
-![image-20260726025250776](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726025250863.png)
+![image-20260726025250776](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726025250863.png)
 
-![image-20260726025209332](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260726025209441.png)
+![image-20260726025209332](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260726025209441.png)
 
 # Pass-15 文件包含
 
@@ -387,17 +387,17 @@ Content-Disposition: form-data; name="submit"
 
 所以这关会读取文件二进制头部（而不是依赖文件名后缀），判断文件类型，并且后端会根据判断得到的文件类型重命名上传文件。所以这关伪造文件名、MIME 都没用。
 
-![image-20260727052533279](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727052533488.png)
+![image-20260727052533279](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727052533488.png)
 
 使用 `图片马 + 本地文件包含` 绕过。
 
 制作图片马（找张gif图，末尾追加一句php代码）
 
-![73708e75ed090d7b1af5a9bf3ee79795](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727061237072.png)
+![73708e75ed090d7b1af5a9bf3ee79795](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727061237072.png)
 
 上传。右键查看网页源码找到重命名后的文件名。
 
-![c4bf7d1b04bde54a79bfa5afcf4f3dda](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727061333999.png)
+![c4bf7d1b04bde54a79bfa5afcf4f3dda](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727061333999.png)
 
 然后进入文件包含漏洞地址`http://127.0.0.1/upload-labs/include.php?file=upload/2720260727061309.gif`，进行文件包含。
 
@@ -409,23 +409,23 @@ include $_GET['file'];
 
 PHP 的 `include` 不看文件后缀，会把 GIF 文件中的 `<?php ... ?>` 代码段解析执行；前面的 GIF 二进制内容只会作为普通输出。这样页面显示 `PASS15_OK`，就说明思路成功。
 
-![image-20260727061434494](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727061434602.png)
+![image-20260727061434494](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727061434602.png)
 
 # Pass-14
 
 Pass-14 比 Pass-15 弱很多：它只读取上传文件的前两个字节。然后把前两个字节当作类型判断。
 
-![image-20260727062004653](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727062004799.png)
+![image-20260727062004653](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727062004799.png)
 
 所以无需一张真正完整的图片。最简单用 GIF 头伪造：前两个字符是 `GI`，能通过 GIF 判断；服务器会随机保存成：随机名.gif
 
-![image-20260727062344952](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727062345038.png)
+![image-20260727062344952](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727062345038.png)
 
 和Pass-15一样上传后右键查看网页源码找到重命名后的文件名，然后访问文件包含地址。
 
-![5dadfc6edd81f0e50aedae72be2f65a9](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727062556481.png)
+![5dadfc6edd81f0e50aedae72be2f65a9](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727062556481.png)
 
-![image-20260727062720304](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727062720386.png)
+![image-20260727062720304](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727062720386.png)
 
 和Pass-15的区别：
 
@@ -440,15 +440,15 @@ Pass-15：getimagesize()，需要完整有效图片，再在末尾追加 PHP。
 
 这一关用的是`exif_imagetype`函数，它比 Pass-14 严一点，但仍只识别 文件头特征 ，不会像 `getimagesize()` 那样真正解析完整图片。
 
-![image-20260727065008543](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727065008676.png)
+![image-20260727065008543](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727065008676.png)
 
 手法是和pass-14一样的。`GIF89a` 让 `exif_imagetype()` 识别为 GIF；服务端随机保存为 `.gif`；再通过包含页执行。
 
-![image-20260727065201211](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727065201289.png)
+![image-20260727065201211](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727065201289.png)
 
-![image-20260727065311627](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727065311746.png)
+![image-20260727065311627](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727065311746.png)
 
-![image-20260727065434078](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260727065434151.png)
+![image-20260727065434078](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260727065434151.png)
 
 区别：
 
@@ -474,7 +474,7 @@ imagecreatefrompng()：创建一块画布，并从 PNG 文件或 URL 地址载�
 
 这一关对上传图片进行了判断了文件名、content-type，以及利用 imagecreatefromgif 判断是否为gif图片后做了一次二次渲染。
 
-![image-20260730023408375](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260730023408838.png)
+![image-20260730023408375](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260730023408838.png)
 
 imagecreatefromgif（）函数，二次渲染是由 Gif 文件或 URL 创建一个新图象。成功则返回一图像标识符/图像资源，失败则返回false，导致图片马的数据丢失。按照前几关的方式上传，可以上传，但是包含漏洞无法解析。原因就是二次渲染将图片马里面的php代码删了。
 
@@ -484,33 +484,33 @@ imagecreatefromgif（）函数，二次渲染是由 Gif 文件或 URL 创建一�
 
 放进 beyond compare，左边是原图，右边是经过了二次渲染的图。红色区域都是两张图不同的地方。
 
-![image-20260730033514585](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260730033514893.png)
+![image-20260730033514585](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260730033514893.png)
 
 找一块连续的黑色区域插入php代码即可。
 
-![4c6cf93d-f88c-4340-8b4e-455ce1cc3919](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260730035639000.png)
+![4c6cf93d-f88c-4340-8b4e-455ce1cc3919](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260730035639000.png)
 
 再重新上传。`<?php phpinfo()?>` 成功执行！这个题有意思！
 
-![image-20260730035752202](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260730035752370.png)
+![image-20260730035752202](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260730035752370.png)
 
 # Pass-18 条件竞争
 
 看一下源码：发现如果上传的符合它的白名单，那就进行重命名，如果不符合，直接删除！解析的机会都没有，这让我想到了条件竞争，如果我在它删除之前就访问这个文件，他就不会删除了。
 
-![image-20260810213403958](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260810213404162.png)
+![image-20260810213403958](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260810213404162.png)
 
 上传一个php文件，然后burp抓包发到爆破模块
 
-![dd3bf3974b67fcc2295b3914204e548e](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260810215348558.png)
+![dd3bf3974b67fcc2295b3914204e548e](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260810215348558.png)
 
 Clear所有的标记，然后设置payload：payload type选null payloads (生成“空 Payload”，实际效果是原样重复发送基础请求)，连续上传1000次。
 
-![image-20260810223122098](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260810223122263.png)
+![image-20260810223122098](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260810223122263.png)
 
 同时开一个请求，也是连续请求访问1000次。
 
-![c65eddf8a0acccfee6cf4831d103d420](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260810224129375.png)
+![c65eddf8a0acccfee6cf4831d103d420](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260810224129375.png)
 
 两个同时开始 start attack；看看有没有哪次请求能命中“文件已上传、尚未 unlink 删除”的窗口。
 
@@ -548,15 +548,15 @@ move_uploaded_file()这样一个函数，有一个特性，会忽略掉文件末
 
 看到20关的页面，明显比前面的多了点东西，多了一个保存名称。查看源码，没有对上传的文件做判断，只对用户输入的文件名做判断。
 
-![image-20260811041518891](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811041519043.png)
+![image-20260811041518891](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811041519043.png)
 
 直接上传shell20.jpg，抓包，修改为shell20.php在末尾加上/.。这样保存的
 
-![01bd75ee879ecea482f645aa756ded04](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811044346575.png)
+![01bd75ee879ecea482f645aa756ded04](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811044346575.png)
 
 直接访问，拿下
 
-![image-20260811044231056](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811044231220.png)
+![image-20260811044231056](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811044231220.png)
 
 这个题的原理就是利用move_uploaded_file函数的特性：
 
@@ -666,10 +666,10 @@ shell21.php
 Windows 再把末尾点去掉。
 ```
 
-![image-20260811050853219](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811050853380.png)
+![image-20260811050853219](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811050853380.png)
 
-![bcc3715d-6e32-46e8-9330-535ffcb5de25](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811053826060.png)
+![bcc3715d-6e32-46e8-9330-535ffcb5de25](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811053826060.png)
 
 拿下
 
-![image-20260811053855954](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260811053856123.png)
+![image-20260811053855954](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260811053856123.png)

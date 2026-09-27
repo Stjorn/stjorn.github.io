@@ -63,7 +63,7 @@ XSS 可以用来实现 CSRF 能做的所有操作，属于 “上位漏洞”；
 
 下面就开始打 RCE 的靶场了。本人是纯萌新，wp会写的比较详细，方便自己复习。
 
-![image-20260926090941061](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926090941250.png)
+![image-20260926090941061](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926090941250.png)
 
 ## 一、无防御措施的 CSRF 漏洞 ⭐
 
@@ -71,7 +71,7 @@ XSS 可以用来实现 CSRF 能做的所有操作，属于 “上位漏洞”；
 
    Burp 里看这个请求：
 
-   ![9321c2b4-29dc-469d-80b0-fcc3dda3bfae](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925043846722.png)
+   ![9321c2b4-29dc-469d-80b0-fcc3dda3bfae](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925043846722.png)
 
 ​	仔细看：
 
@@ -85,15 +85,15 @@ XSS 可以用来实现 CSRF 能做的所有操作，属于 “上位漏洞”；
 
 2. 开始构造攻击页面：这个页面 Burp 里可以自动生成，但是要 pro 版的才可以。
 
-   <img src="https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925052231736.png" alt="4a4a4d1c-f259-4afd-bb85-8bc6460a3667" style="zoom: 80%;" />
+   <img src="https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925052231736.png" alt="4a4a4d1c-f259-4afd-bb85-8bc6460a3667" style="zoom: 80%;" />
 
    我这里就手写学习学习。
 
-![20ba42501136e22c0ecd19e66f61a545](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925054729325.png)
+![20ba42501136e22c0ecd19e66f61a545](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925054729325.png)
 
 Deliver to victim 后， 靶场的机器人受害者就会带着它自己的登录 Cookie 访问我的这个页面，然后邮箱被我偷偷篡改：
 
-![349021aeac6c9ddf70ff9508f1956f0a](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925054943890.png)
+![349021aeac6c9ddf70ff9508f1956f0a](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925054943890.png)
 
 第一关是原理，后面的就都是基于漏洞的绕过了。
 
@@ -105,17 +105,17 @@ Deliver to victim 后， 靶场的机器人受害者就会带着它自己的登�
 
 1.  登录账号，发出修改邮箱的请求后，可以看到这次多了个  **CSRF token**。
 
-![image-20260925070801804](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925070801886.png)
+![image-20260925070801804](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925070801886.png)
 
 2. 在 Repeater 里做实验：先将 Post请求中的 crsf 值随便改坏一位，send 后果然直接报错。说明服务器端确实存在 token 校验。
 
    将请求换成 Get 试试，发现无论是改坏还是直接删掉 crsf 值都是直接成功，说明 GET 请求根本不校验 token。
 
-   ![image-20260925071507877](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925071507970.png)
+   ![image-20260925071507877](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925071507970.png)
 
 3. 现在开始组装Poc。怎么让受害者的浏览器自动发一个 GET 请求呢？很简单，用一张图片：用户点进来后，浏览器渲染页面时，看到`<img>` 就会立刻自动去请求这个 URL（加载图片 = GET 请求）。受害者已经登录，浏览器自动带上他的 Cookie。服务器收到这个 GET 请求后，跳过 Token校验 → 改邮箱成功。
 
-   ![73d7e35e97134221abfe23c5d0f26606](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925071654326.png)
+   ![73d7e35e97134221abfe23c5d0f26606](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925071654326.png)
 
 ## 三、Token 验证依赖于 Token 存在的 CSRF 漏洞
 
@@ -123,7 +123,7 @@ Deliver to victim 后， 靶场的机器人受害者就会带着它自己的登�
 
 所以Poc直接和第一关一样就行。
 
-![image-20260925081012037](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925081012143.png)
+![image-20260925081012037](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925081012143.png)
 
 ## 四、Token 未与用户 session 绑定的 CSRF 漏洞
 
@@ -131,17 +131,17 @@ Deliver to victim 后， 靶场的机器人受害者就会带着它自己的登�
 
 做下实验：先登 wiener 的账号拿一下 crsf token：
 
-![image-20260925094001432](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925094001591.png)
+![image-20260925094001432](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925094001591.png)
 
 然后拿 carlos 的请求，发到Repeater，把 body 里的 csrf 值替换成第wiener的 crsf token 后 send：
 
-![image-20260925094337068](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925094337152.png)
+![image-20260925094337068](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925094337152.png)
 
 还是成功发送了，确实没有和 用户session 绑定。
 
 写PoC：
 
- ![806425ff2f0e685b0ce539ecf1e234cc](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925094659574.png)
+ ![806425ff2f0e685b0ce539ecf1e234cc](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925094659574.png)
 
 ## 五、Token 与非会话 Cookie 绑定的 CSRF 漏洞 ⭐
 
@@ -161,21 +161,21 @@ Set-Cookie: LastSearchTerm=test
 
 
 
-<img src="https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925105951027.png" alt="image-20260925105950897" style="zoom:80%;" />
+<img src="https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925105951027.png" alt="image-20260925105950897" style="zoom:80%;" />
 
 可以看到这关的请求里 Cookie 这一行多了个 csrfKey。这关 csrf 确实和某个东西绑定了，但绑的是 csrfKey 这个 cookie，而不是服务器端的 session。cookie 是存在用户浏览器里、可以被影响的东西——而 token 必须绑在“攻击者动不了的东西”上。绑到 cookie 上就有隐患：如果我能**把受害者浏览器里的 csrfKey 换成我的**，那我手里的 csrf 就和他的 csrfKey 配上套了？
 
 测下能不能用 CRLF 注入种 Cookie：搜索词原样进了响应头 ，有戏。
 
-![image-20260925110316617](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925110316715.png)
+![image-20260925110316617](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925110316715.png)
 
 把请求行改成：`GET /?search=test%0d%0aFoo:%20bar HTTP/2`。看响应头，多出了一行 `Foo: bar` → 换行符没过滤，可以伪造任意响应头。
 
-![image-20260925111833156](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925111833257.png)
+![image-20260925111833156](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925111833257.png)
 
 写Poc：
 
-![image-20260925112649051](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925112649133.png)
+![image-20260925112649051](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925112649133.png)
 
 时序是这段Poc的精华：
 
@@ -193,15 +193,15 @@ Set-Cookie: LastSearchTerm=test
 
 但是我们已经知道了 CRLF 注入，只要服务器不过滤回车换行符（`%0d%0a`），就能伪造任意响应头。
 
-![image-20260925115938536](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925115938630.png)
+![image-20260925115938536](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925115938630.png)
 
 这一关，因为服务器不记账，我们连真 token 都不需要，随便编一个就行！
 
-![image-20260925120542917](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925120543009.png)
+![image-20260925120542917](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925120543009.png)
 
 写Poc：
 
-![ab15575d78fde843e3bfb97d03e22d7d](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925120559680.png)
+![ab15575d78fde843e3bfb97d03e22d7d](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925120559680.png)
 
 ## 七、通过方法覆盖绕过 SameSite Lax 限制 ⭐
 
@@ -229,19 +229,19 @@ Set-Cookie: LastSearchTerm=test
 
 1. 先看一下请求：body 里只有 emalil ，没有 CSRF token，所以只要能带上 Cookie，就能打通。Cookie 那一行没看到 SameSite，应该是默认 Lax。
 
-   ![ba79a20a0f0fd25e6078da22586f909d](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926030550948.png)
+   ![ba79a20a0f0fd25e6078da22586f909d](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926030550948.png)
 
 2. 现在要想办法让 Cookie 在跨站的时候带上。只有 “Lax对顶级 get 导航"这一条可以利用。先将请求直接改成 get 试试：发现行不通，和第二关不一样，接口只认 POST。
 
-   ![image-20260926031112974](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926031113192.png)
+   ![image-20260926031112974](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926031113192.png)
 
    还有一条路是：这套靶场后端是 Spring 框架，支持**方法覆盖**。所以只要请求里只要带上 `_method=POST` 参数，框架就把这个请求当作 POST  来处理，哪怕它外表是个 GET。试一下：请求果然被接受了。可以利用这点来骗 Lax 和 Spring 框架 了。
 
-   ![image-20260926031453488](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926031453578.png)
+   ![image-20260926031453488](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926031453578.png)
 
 3. 写Poc。这里用`document.location` 而不是 `<img>` 或表单：必须制造“顶级 GET 导航”，Cookie 才会被 Lax 放行。_method参数来骗 Spring 框架。
 
-   ![826eb755834601f9721866fb05c6b106](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926031728441.png)
+   ![826eb755834601f9721866fb05c6b106](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926031728441.png)
 
 攻击链条：
 
@@ -265,23 +265,23 @@ GET /my-account/change-email?email=...&_method=POST
 
    所以思路变成：**我不能自己跳到接口，而是让目标站的某个页面替我跳**。这种“目标站上可以被利用来发起跳转/请求的功能”有个术语叫 **gadget（站内跳板）**。
 
-   ![image-20260926041902082](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926041902329.png)
+   ![image-20260926041902082](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926041902329.png)
 
-​	依旧没设 CSRF Token，只要能带上 Cookie，就能打通。	![image-20260926043247162](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926043247265.png)
+​	依旧没设 CSRF Token，只要能带上 Cookie，就能打通。	![image-20260926043247162](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926043247265.png)
 
 ​	这次这个修改邮箱的功能既有 POST 接口，又有 Get 接口。不需要用 `_method` 伪装了。
 
-![8b001b48-ada0-47ad-987b-3711cb83b216](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926043836619.png)
+![8b001b48-ada0-47ad-987b-3711cb83b216](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926043836619.png)
 
 2. 套路踩点踩完了。现在找跳板。浏览器随便打开一篇博客文章，发一条评论。点击发送后会先跳转到 谢谢评论 的页面，几秒后自动跳回文章。找到加载谢谢评论页面的那条 Get 请求：
 
    看响应里的HTML，发现它引用了`/resources/js/commentConfirmationRedirect.js`。
 
-   ![c82cfeea-3db8-4aee-b5b6-a5d2708c70f4](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926044504479.png)
+   ![c82cfeea-3db8-4aee-b5b6-a5d2708c70f4](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926044504479.png)
 
    再看`/resources/js/commentConfirmationRedirect.js`的响应：它拿 `postId` 拼出跳转地址
 
-   ![0ea606ac-cba2-4b31-b4ba-0cc292cb6ccd](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926045528597.png)
+   ![0ea606ac-cba2-4b31-b4ba-0cc292cb6ccd](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926045528597.png)
 
    浏览器直接访问试下：`/post/comment/confirmation?postId=foo`。会先进入到谢谢评论页面，几秒钟后返回404页面（正常的，因为 foo是瞎编的）→ **postId 完全控制跳转路径**。
 
@@ -295,7 +295,7 @@ GET /my-account/change-email?email=...&_method=POST
 
 3. 写 Poc：`/../..`：抵消 JS 拼的 `/post/` 前缀，回到根。
 
-   ![image-20260926051032538](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926051032594.png)
+   ![image-20260926051032538](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926051032594.png)
 
 攻击链：
 
@@ -347,16 +347,16 @@ Site 相同（同属 web-security-academy.net）
    - Request 面板：请求头里没有任何 token，只有浏览器自动带的 Cookie
    - Response 面板：状态行是 `101 Switching Protocol`——这就是 WebSocket 握手成功
 
-   ![image-20260926072344088](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926072344292.png)
+   ![image-20260926072344088](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926072344292.png)
 
    再看下 WebSocket 里收发的消息：
 
    - 浏览器 → 服务器方向：内容是 **`READY`**
    - 服务器 → 浏览器方向：内容是刚刚在 Live chat 发的消息。
 
-   ![image-20260926072455496](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926072455613.png)
+   ![image-20260926072455496](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926072455613.png)
 
-   ![image-20260926072528496](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926072528569.png)
+   ![image-20260926072528496](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926072528569.png)
 
 2.  确认一下 CSWSH 是否可行。这里需要用到 Burp 的Collaborator（外带信箱）: 聊天记录会到达 受害者浏览器里 的攻击脚本手上，但我们人在 Burp 这头，够不着，所以我们就需要一个信箱，脚本里用 fecth 把每条消息记录都 push 到信箱中，这样我们就能拿到了。先领一下信箱地址：`qe81kdpzt9jckz75el906xuneek583ws.oastify.com`。
 
@@ -376,33 +376,33 @@ Site 相同（同属 web-security-academy.net）
    </script>
    ```
 
-   ![6190445ce67a522637c4d57e3bd2b3b9](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926074410483.png)
+   ![6190445ce67a522637c4d57e3bd2b3b9](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926074410483.png)
 
    看下信箱收到的：CSWSH 通道成立。脚本能以“浏览器代发”的方式连上聊天并拿到消息。因为我们的脚本是跨站的， Strict 在拦 Cookie，所以拿不到老会话，信箱里的是个新会话的开场白。
 
-   ​	![image-20260926075631546](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926075631642.png)
+   ​	![image-20260926075631546](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926075631642.png)
 
 3. 我们知道 SamSite的墙只在 Site 层而没到 域层，所以现在得向办法找到主站的兄弟域。这里可能因为是做题的缘故，靶场自己提供了一个cms兄弟域。
 
-   ![6ff4a044-753e-41ec-80b7-0e80851d7f1c](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926080810247.png)
+   ![6ff4a044-753e-41ec-80b7-0e80851d7f1c](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926080810247.png)
 
    点进去是个登录的表单，或许可以帮助我们进行 XSS。
 
-   ![image-20260926080948948](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926080949054.png)
+   ![image-20260926080948948](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926080949054.png)
 
    username 换成：`<script>alert(1)</script>`试一下，果然。可以进行反射型 XSS。
 
-   ![image-20260926081124698](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926081124782.png)
+   ![image-20260926081124698](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926081124782.png)
 
    找到刚刚那条 `POST /login` ，改成 GET 方法 发送（因为要用 xss，得从 url 里传参）
 
-   ![de3fba72-39d9-4791-b7ce-a2fa0c2b4c3c](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926082121804.png)
+   ![de3fba72-39d9-4791-b7ce-a2fa0c2b4c3c](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926082121804.png)
 
    成功了，这个 payload 可以塞在 URL 里让浏览器 导航过去 触发。
 
 4. 组装攻击链：先将 CSWSH 脚本整体进行URL 编码：
 
-   ![135604f0-d503-4b76-a3f7-646b703bae76](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926082719876.png)
+   ![135604f0-d503-4b76-a3f7-646b703bae76](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926082719876.png)
 
    得到：
 
@@ -418,15 +418,15 @@ Site 相同（同属 web-security-academy.net）
    </script>
    ```
 
-   ![image-20260926083112532](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926083112642.png)
+   ![image-20260926083112532](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926083112642.png)
 
    信箱里拿到了受害者的聊天记录：下面这个是他的账号和重置后的密码。
 
-   ![image-20260926083258225](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926083258365.png)
+   ![image-20260926083258225](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926083258365.png)
 
    我们去登录一下他的账号。登录成功这关就打完了。
 
-   ![image-20260926083550576](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926083550688.png)
+   ![image-20260926083550576](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926083550688.png)
 
 这关的攻击链：
 
@@ -515,7 +515,7 @@ Poc：
 </html>
 ```
 
-![image-20260926090732805](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926090733067.png)
+![image-20260926090732805](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926090733067.png)
 
 ## 十一、Referer 验证缺陷导致的 CSRF 漏洞
 
@@ -551,11 +551,11 @@ exploit 页先执行: history.pushState("", "", "/?主站域名")
 </html>
 ```
 
-![image-20260926102554101](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926102554261.png)
+![image-20260926102554101](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926102554261.png)
 
 这题有个小坑点：现代浏览器默认会把 Referer 的**查询串部分掐掉**（安全策略：只发源，不发完整 URL）——这样我们种的域名就被剪没了。解法就是让 exploit 页的**响应头**声明 `Referrer-Policy: unsafe-url`，命令浏览器“Referer 给我发完整 URL，查询串也带上”。
 
-![image-20260926103157721](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260926103157835.png)
+![image-20260926103157721](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926103157835.png)
 
 还有要注意的点可以了解一下原因，挺有意思的：1990 年代写 HTTP 规范文档时，作者手滑打成了 `Referer`（少了一个 r）。等大家发现的时候，全世界的浏览器、服务器都已经照着错的实现了——改了就等于破坏所有现存系统。于是委员会决定将错就错，错误拼写成为正式标准，一错三十年。于是现在的 Referer这个的拼写就很不统一。
 

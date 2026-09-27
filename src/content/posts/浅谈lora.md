@@ -13,7 +13,7 @@ draft: false
 
 先看一下LLM训练的全过程：
 
-![image-20260602224902327](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260602224902401.png)
+![image-20260602224902327](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260602224902401.png)
 
 在预训练阶段，模型在大规模标注文本上学习对下一个token的分布表示；在下游应用中，通过微调可使模型适应特定任务领域或风格（如问答、代码生成、对话系统等）。**微调本质是教会模型遵循用户指令，把知识按照要求表达出来。**
 
@@ -71,11 +71,11 @@ $$
 
 前向：
 
-![951246378bac825f801188d5cb2eda2f](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925015217108.jpg)
+![951246378bac825f801188d5cb2eda2f](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925015217108.jpg)
 
 反向：
 
-<img src="https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260925015249681.jpg" alt="4785ba0eee64070c659880df9c513dcd" style="zoom: 33%;" />
+<img src="https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260925015249681.jpg" alt="4785ba0eee64070c659880df9c513dcd" style="zoom: 33%;" />
 
 # 二、手撕实战
 
@@ -126,7 +126,7 @@ print(f"数据集:{dataset}")
 print(f"数据集列{dataset.column_names}")
 ```
 
-![image-20260604171427906](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260604171428330.png)
+![image-20260604171427906](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260604171428330.png)
 
 ## 3. 处理数据集
 
@@ -189,7 +189,7 @@ if tokenizer.pad_token is None:
 
 pad是padding 填充符，batch 训练时补齐短句长度必需。很多大模型（Llama、Qwen、Mistral）原生没有 pad_token，只有 eos_token，所以赋值`pad_token = eos_token`，避免 Trainer 训练时报错。
 
-![image-20260604232112870](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260604232113185.png)
+![image-20260604232112870](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260604232113185.png)
 
 ## 4. 模型量化
 
@@ -213,7 +213,7 @@ print("model loaded")
 print(model)
 ```
 
-![image-20260605110112078](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260605110112567.png)
+![image-20260605110112078](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260605110112567.png)
 
 ## 5. LoRA配置
 
@@ -247,7 +247,7 @@ print("Lora applied to the model")
 model.print_trainable_parameters()
 ```
 
-![image-20260605110243404](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260605110243526.png)
+![image-20260605110243404](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260605110243526.png)
 
 ## 6. 训练配置
 
@@ -560,7 +560,7 @@ Start training...
 
 最后推荐一下LlamaFactory这个框架吧，这个框架可以实现模型训练的可视化操作，我觉得无论是新手还是老手使用这个框架去进行工作都是更方便的：
 
-![image-20260605131250424](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260605131250840.png)
+![image-20260605131250424](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260605131250840.png)
 
 前面的学习可以说是为了夯实基本功，但真正干活的时候还是怎么方便怎么来。
 

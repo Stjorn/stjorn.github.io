@@ -17,7 +17,7 @@ draft: false
 
 本文完整讲解我实现的 **MFF-LightGBM 异常加密流量检测系统**。系统从原始 PCAP/PCAPNG 文件开始，依次完成数据处理、统计特征提取、语义特征提取、特征降维融合和 LightGBM 检测。
 
-![image-20260808035210747](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260808035211197.png)
+![image-20260808035210747](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260808035211197.png)
 
 # 一、任务定义与总体架构
 
@@ -1267,7 +1267,7 @@ def predict_in_batches(model, X):
 | Macro F1    | 0.9148 |
 | Weighted F1 | 0.9369 |
 
-![image-20260810184223556](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260810184223855.png)
+![image-20260810184223556](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260810184223855.png)
 
 ### 7.2 结果总结
 

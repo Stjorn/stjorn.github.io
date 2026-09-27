@@ -13,7 +13,7 @@ draft: false
 
 先看一下A2A、MCP、Skills三者的协同架构图：
 
-<img src="https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260612144502626.png" alt="image-20260612144502543" style="zoom: 50%;" />
+<img src="https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260612144502626.png" alt="image-20260612144502543" style="zoom: 50%;" />
 
 |  概念  |                     角色                      | 方向 |       提出者        |
 | :----: | :-------------------------------------------: | :--: | :-----------------: |
@@ -552,7 +552,7 @@ if __name__ == "__main__":
 
 ```
 
-![image-20260614222103909](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614222104209.png)
+![image-20260614222103909](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614222104209.png)
 
 **client.py：Purchasing Agent**
 
@@ -706,7 +706,7 @@ if __name__ == "__main__":
 
 ```
 
-![image-20260614225104944](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614225105142.png)
+![image-20260614225104944](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614225105142.png)
 
 # 三、MCP
 
@@ -745,7 +745,7 @@ MCP和A2A一样采用C/S架构，中间用 **JSON-RPC 2.0** 协议通信，这�
 
 `MCP Server`，是整个 MCP 架构的核心部分，主要用来为客户端提供各种工具、资源和功能支持。它负责处理客户端的请求，包括解析协议、提供工具、管理资源以及处理各种交互信息。他的本质是运行在电脑上的一个nodejs或python程序。
 
-![](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614210727413.png)
+![](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614210727413.png)
 
 主要暴露三类东西：
 
@@ -759,9 +759,9 @@ MCP和A2A一样采用C/S架构，中间用 **JSON-RPC 2.0** 协议通信，这�
 
 别人的图
 
-![6cdc0672d18e299f2dffe117e717ffca](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614210851501.png)
+![6cdc0672d18e299f2dffe117e717ffca](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614210851501.png)
 
-![c7ef289d8f65f0609b77f708f3cd8bae](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614210958901.png)
+![c7ef289d8f65f0609b77f708f3cd8bae](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614210958901.png)
 
 ## MCP的具体实现
 
@@ -1278,9 +1278,9 @@ if __name__ == "__main__":
 
 ```
 
-![image-20260614235044516](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614235044671.png)
+![image-20260614235044516](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614235044671.png)
 
-![image-20260614235020234](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260614235020379.png)
+![image-20260614235020234](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260614235020379.png)
 
 ## 配置现有的MCP
 
@@ -1307,11 +1307,11 @@ MCP现在的生态很丰富，下面以cluade code 为例说一下怎么配置�
 
    这个是配到`.mcp.json`里的（项目共享级），如果想配到`.claude.json`下（项目私有级）或者`C:\Users\用户名\.claude.json`下（全局用户级），把`--scope`后的参数改成`loacl/user`即可。
 
-   ![887ed8ac08e5b92b77459236854c0c44](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260615010310949.png)
+   ![887ed8ac08e5b92b77459236854c0c44](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260615010310949.png)
 
    通过`claude mcp list`查看：
 
-   ![image-20260615005017806](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260615005017987.png)
+   ![image-20260615005017806](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260615005017987.png)
 
    当然，你可以下载别人的mcp，然后配置到你的cc里，以高德为例：
 
@@ -1450,7 +1450,7 @@ Token 成本：中等，一般 < 5,000 tokens。
 
 下面是Google总结的5种 Skill 设计模式，我觉得挺好的，看完之后自己动手开发 Skill 时能有个大概的思路。
 
-![Image](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616000241025.jpeg)
+![Image](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616000241025.jpeg)
 
 **工具封装器（Tool Wrapper）**
 
@@ -1460,7 +1460,7 @@ SKILL.md 中定义了匹配规则，系统会监听用户提示词里特定代�
 
 适用场景：适合将团队的内部编码指南或特定框架最佳实践直接分发到开发者工作流中。
 
-![image-20260616001501226](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616001501449.png)
+![image-20260616001501226](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616001501449.png)
 
 SKILL.md示例：
 
@@ -1499,7 +1499,7 @@ metadata:
 
 适用场景：适合生成可预测的 API 文档、标准化提交信息或搭建项目架构。
 
-![image-20260616003018328](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616003018574.png)
+![image-20260616003018328](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616003018574.png)
 
 SKILL.md示例：
 
@@ -1540,7 +1540,7 @@ references/ 目录下通常存放如 style-guide.md 等指导性文件。它规�
 
 适用场景：适合自动化审计相关的流程。
 
-![image-20260616150920507](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616150920976.png)
+![image-20260616150920507](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616150920976.png)
 
 SKILL.md示例：
 
@@ -1577,7 +1577,7 @@ Agent 往往本能地想要立刻进行猜测并生成结果。 反转模式颠�
 
 适用场景：适合需要大量前置信息的复杂任务。
 
-![image-20260616152150095](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616152150310.png)
+![image-20260616152150095](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616152150310.png)
 
 SKILL.md示例：
 
@@ -1620,7 +1620,7 @@ metadata:
 
 适用场景：适合复杂的任务，无法承受遗漏步骤的常见。
 
-![image-20260616165843654](https://cdn.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260616165844104.png)
+![image-20260616165843654](https://cdn.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260616165844104.png)
 
 SKILL.md示例：
 

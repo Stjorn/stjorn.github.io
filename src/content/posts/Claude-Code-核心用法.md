@@ -46,7 +46,7 @@ Skill 是一套流程说明——规定"审查 diff 时查哪些东西、输出�
 
 直接在 Claude Code 里说 "请帮我创建一个项目级 Skill，名字叫 review-diff，放在 .claude/skills/review-diff/SKILL.md。先展示内容，我确认后再创建" 就可以。当然，也可以自己写或者网上下载别人的Skill。
 
-具体的我在另一篇博客里详细写过：[Agent 三件套](https://whyulooksad.github.io/posts/agent%E4%B8%89%E4%BB%B6%E5%A5%97/)
+具体的我在另一篇博客里详细写过：[Agent 三件套](/posts/agent三件套/)
 
 ---
 
@@ -221,7 +221,7 @@ MCP安全风险其实挺多的，建议在 CLAUDE.md 里写死 MCP 安全规则�
 - GitHub MCP 默认只读 issue，不直接修改 issue 或 PR
 - 涉及写操作必须先给方案、影响范围和确认点
 
-我这篇博客也详细讲了MCP: [Agent 三件套](https://whyulooksad.github.io/posts/agent%E4%B8%89%E4%BB%B6%E5%A5%97/)
+我这篇博客也详细讲了MCP: [Agent 三件套](/posts/agent三件套/)
 
 ---
 

@@ -4,4 +4,4 @@
 
 AI & Security Researcher
 
-::github{repo="whyulooksad/whyulooksad.github.io"}
+::github{repo="Stjorn/stjorn.github.io"}

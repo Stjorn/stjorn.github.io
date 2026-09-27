@@ -212,7 +212,7 @@ $$
 
 **底层依赖**：必须搭配 PagedAttention 分页 KV 才能实现动态回收、复用显存块；
 
-![image-20260708155125645](https://fastly.jsdelivr.net/gh/whyulooksad/image_bed@main/images/20260708155126029.png)
+![image-20260708155125645](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260708155126029.png)
 
 ### vLLM部署
 
