@@ -2,8 +2,8 @@
 title: '浅谈LoRA SFT'
 published: 2026-06-02
 description: '这次来谈谈LoRA微调'
-tags: [LLM, SFT, Post-Training]
-category: AI
+tags: [AI]
+category: note
 draft: false
 ---
 

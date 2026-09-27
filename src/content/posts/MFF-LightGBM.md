@@ -2,8 +2,8 @@
 title: 'MFF-LightGBM：基于多维特征融合的异常加密流量检测模型'
 published: 2026-08-07
 description: '基于 DeBERTa-v3 与 LightGBM 的恶意加密流量检测算法——在不解密通信内容的前提下，融合流量统计特征与 TLS/X509 行为语义特征，实现正常流量、广告软件、DNS 隧道、勒索软件等八类加密流量检测。'
-tags: [ML, DL, LLM, 网络安全]
-category: [AI, Security]
+tags: [Security, AI]
+category: practice
 draft: false
 ---
 

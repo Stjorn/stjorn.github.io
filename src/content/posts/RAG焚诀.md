@@ -2,8 +2,8 @@
 title: 'RAG焚诀'
 published: 2026-05-08
 description: '今天来谈谈RAG实战中的一些细节。RAG这东西很简单，但是想做好还是需要一点细节。'
-tags: [Agent, RAG]
-category: AI
+tags: [AI]
+category: practice
 draft: false
 ---
 

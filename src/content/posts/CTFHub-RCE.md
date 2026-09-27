@@ -2,8 +2,8 @@
 title: 'rce学习笔记'
 published: 2026-04-20
 description: 'CTFHub-RCE'
-tags: [Web, CTF]
-category: Security
+tags: [Security]
+category: note
 draft: false
 ---
 

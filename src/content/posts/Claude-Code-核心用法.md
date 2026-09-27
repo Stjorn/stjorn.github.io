@@ -2,8 +2,8 @@
 title: 'Claude Code的一些核心用法'
 published: 2026-06-20
 description: '在Boss上投了一个岗位，是以claude code为核心工具搭建自动化工具链的，所以今天好好研究一下'
-tags: [Agent, Claude Code]
-category: AI
+tags: [AI]
+category: note
 draft: false
 ---
 

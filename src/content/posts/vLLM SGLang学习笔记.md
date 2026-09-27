@@ -2,8 +2,8 @@
 title: 'vLLM SGLang学习笔记'
 published: 2026-07-09
 description: '大模型推理加速真的是做agent很容易被忽视的一部分，但又非常重要'
-tags: [LLM, Agent, vLLM, SGLang]
-category: AI
+tags: [Security]
+category: note
 draft: false
 ---
 
