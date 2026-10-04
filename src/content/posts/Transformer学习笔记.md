@@ -1,6 +1,6 @@
 ---
 title: 'Transformer学习笔记'
-published: 2026-04-28
+published: 2026-05-15
 description: '这段时间在找实习，想着把之前学的东西都系统地复习一遍，先从Transformer开始！'
 tags: [AI]
 category: note
