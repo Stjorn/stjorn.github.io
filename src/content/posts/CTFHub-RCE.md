@@ -1,7 +1,7 @@
 ---
 title: 'rce学习笔记'
 published: 2026-04-20
-description: 'CTFHub-RCE'
+description: 'CTFHub-RCE WP'
 tags: [Security]
 category: note
 draft: false

@@ -1,7 +1,7 @@
 ---
 title: 'upload学习笔记'
 published: 2026-04-17
-description: 'upload_labs Less1-21'
+description: 'upload_labs Less1-21 wp'
 tags: [Security]
 category: note
 draft: false

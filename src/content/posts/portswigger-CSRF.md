@@ -1,7 +1,7 @@
 ---
 title: 'csrf学习笔记'
 published: 2026-04-25
-description: 'PortswiggerLabs-CSRF'
+description: 'PortswiggerLabs-CSRF WP'
 tags: [Security]
 category: note
 draft: false
@@ -61,7 +61,7 @@ XSS 可以用来实现 CSRF 能做的所有操作，属于 “上位漏洞”；
 
 
 
-下面就开始打 RCE 的靶场了。本人是纯萌新，wp会写的比较详细，方便自己复习。
+下面就开始打 CSRF 的靶场了。本人是纯萌新，wp会写的比较详细，方便自己复习。
 
 ![image-20260926090941061](https://fastly.jsdelivr.net/gh/Stjorn/image_bed@main/images/20260926090941250.png)
 

@@ -1,7 +1,7 @@
 ---
 title: 'sqli学习笔记'
 published: 2026-04-15
-description: 'sqli_labs Less1-20'
+description: 'sqli_labs Less1-20 wp'
 tags: [Security]
 category: note
 draft: false
