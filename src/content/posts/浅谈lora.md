@@ -1,6 +1,6 @@
 ---
 title: '浅谈LoRA SFT'
-published: 2026-06-02
+published: 2025-09-02
 description: '这次来谈谈LoRA微调'
 tags: [AI]
 category: note

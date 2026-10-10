@@ -1,6 +1,6 @@
 ---
 title: 'ssrf学习笔记'
-published: 2026-05-01
+published: 2025-05-01
 description: 'ssrf_labs wp'
 tags: [Security]
 category: note

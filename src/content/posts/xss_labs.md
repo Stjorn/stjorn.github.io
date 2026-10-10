@@ -1,6 +1,6 @@
 ---
 title: 'xss学习笔记'
-published: 2026-04-19
+published: 2025-04-19
 description: 'xss_labs Less1-20 wp'
 tags: [Security]
 category: note

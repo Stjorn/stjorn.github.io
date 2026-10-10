@@ -1,6 +1,6 @@
 ---
 title: 'csrf学习笔记'
-published: 2026-04-25
+published: 2025-04-25
 description: 'PortswiggerLabs-CSRF WP'
 tags: [Security]
 category: note
