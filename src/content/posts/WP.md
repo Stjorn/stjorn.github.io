@@ -1,6 +1,6 @@
 ---
 title: 'ISCTF2026 WP'
-published: 2025-04-19
+published: 2026-11-23
 description: '2026年ISCTF比赛解析部分Writeup'
 tags: [Security]
 category: practice
